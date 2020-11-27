@@ -37,29 +37,15 @@ visited = np.zeros(shape=(image.shape[0], image.shape[1]))
 
 
 def dfs(x, y, image, rows, cols):
-    if(possible(x, y, rows, cols) and (visited[x][y] == 0) and is_red(x, y, image)):
+    if(visited[x][y]):
+        return 
+    if(possible(x, y, rows, cols) and is_red(x, y, image)):
         visited[x][y] = 1
-        if(possible(x - 1, y, rows, cols) and all_white(x - 1, y, image) and (visited[x - 1][y] == 0)):
+        if(possible(x - 1, y, rows, cols) and all_white(x - 1, y, image)):
             image[x - 1][y][0] = 0
             image[x - 1][y][1] = 14
             image[x - 1][y][2] = 255
             dfs(x - 1, y, image, rows,  cols)
-        if(possible(x + 1, y, rows, cols) and all_white(x + 1, y, image) and (visited[x - 1][y] == 0)):
-            image[x + 1][y][0] = 0
-            image[x + 1][y][1] = 14
-            image[x + 1][y][2] = 255
-            dfs(x + 1, y, image, rows,  cols)
-        if(possible(x , y + 1, rows, cols) and all_white(x, y + 1, image) and (visited[x - 1][y] == 0)):
-            image[x][y][0] = 0
-            image[x][y][1] = 14
-            image[x][y][2] = 255
-            dfs(x, y + 1, image, rows, cols)
-        if(possible(x, y - 1, rows, cols) and all_white(x, y - 1, image) and (visited[x - 1][y] == 0)):
-            image[x][y - 1][0] = 0
-            image[x][y - 1][1] = 14
-            image[x][y - 1][2] = 255
-            dfs(x, y - 1, image, rows, cols)
-
 
 
 def main():
@@ -69,8 +55,7 @@ def main():
 
     for i in range(rows):
         for j in range(cols):
-            if(is_red(i, j, image) and (visited[i][j] == 0)):
-                print("here")
+            if(is_red(i, j, image)):
                 dfs(i, j, image, rows, cols)
 
     cv2.imwrite("Output.jpg", image)
